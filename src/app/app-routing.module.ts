@@ -19,7 +19,8 @@ const routes: Routes = [
     path: 'signup',
     loadChildren: './signup/signup.module#SignupPageModule',
     canActivate: [LoggedinGuard]
-  },
+  }
+  // { path: 'comments', loadChildren: './comments/comments.module#CommentsPageModule' },
 ];
 
 @NgModule({

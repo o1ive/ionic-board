@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController, ToastController } from '@ionic/angular';
+import { AlertController, ToastController, ModalController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
 
@@ -12,7 +12,9 @@ import * as firebase from 'firebase';
 
 // 定義したインターフェースをインポートしておく
 import { Post } from '../models/post';
-import { async } from '@angular/core/testing';
+
+// コメントページのインポート
+import { CommentsPage } from '../comments/comments.page';
 
 @Component({
   selector: 'app-home',
@@ -32,7 +34,8 @@ export class HomePage implements OnInit {
     private toastCtrl: ToastController,
     private afStore: AngularFirestore,
     private afAuth: AngularFireAuth,
-    private router: Router
+    private router: Router,
+    private modalCtrl: ModalController
   ) {}
 
   ngOnInit() {
@@ -188,5 +191,16 @@ export class HomePage implements OnInit {
         });
         await toast.present();
       });
+  }
+
+  // コメントページへ現在の投稿を受け渡しつつ移動
+  async showComment(post: Post) {
+    const modal = await this.modalCtrl.create({
+      component: CommentsPage,
+      componentProps: {
+        sourcePost: post
+      }
+    });
+    return await modal.present();
   }
 }

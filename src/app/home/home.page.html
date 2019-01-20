@@ -34,7 +34,7 @@
       <div margin-bottom>{{p.message}}</div>
       <ion-row>
         <ion-col size="6" size-sm>
-          <ion-button fill="clear" size="small">
+          <ion-button (click)="showComment(p)" fill="clear" size="small">
             <ion-icon name="text"></ion-icon>
             <div>コメント</div>
           </ion-button>
