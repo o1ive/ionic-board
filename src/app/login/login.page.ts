@@ -32,7 +32,7 @@ export class LoginPage implements OnInit {
       .signInWithEmailAndPassword(this.login.email, this.login.password)
       .then(async user => {
         const toast = await this.toastCtrl.create({
-          message: 'ログインできました',
+          message: `${user.user.displayName}さん、こんにちは！`,
           duration: 3000
         });
         await toast.present();
@@ -46,5 +46,9 @@ export class LoginPage implements OnInit {
         });
         await toast.present();
       });
+  }
+
+  gotoSignup() {
+    this.router.navigateByUrl('/signup');
   }
 }
