@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController, ToastController } from '@ionic/angular';
+import * as moment from 'moment';
 
 import {
   AngularFirestore,
@@ -55,7 +56,6 @@ export class HomePage implements OnInit {
           id: docRef.id
         });
         // 追加できたら入力フィールドを空にする
-        
         this.message = '';
       })
       .catch(async error => {
@@ -156,5 +156,11 @@ export class HomePage implements OnInit {
         });
         await toast.present();
       });
+  }
+
+  // 投稿日時と現在日時殿さを返す
+  differenceTime(time: Date): string {
+    moment.locale('ja');
+    return moment(time).fromNow();
   }
 }
