@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController, ToastController } from '@ionic/angular';
+import { Router } from '@angular/router';
 import * as moment from 'moment';
 
 import {
@@ -11,6 +12,7 @@ import * as firebase from 'firebase';
 
 // 定義したインターフェースをインポートしておく
 import { Post } from '../models/post';
+import { async } from '@angular/core/testing';
 
 @Component({
   selector: 'app-home',
@@ -29,10 +31,12 @@ export class HomePage implements OnInit {
     private alertCtrl: AlertController,
     private toastCtrl: ToastController,
     private afStore: AngularFirestore,
-    private afAuth: AngularFireAuth
+    private afAuth: AngularFireAuth,
+    private router: Router
   ) {}
 
   ngOnInit() {
+    this.afStore.firestore.enableNetwork();
     // コンポーネントの初期化時に、投稿を読み込むgetPosts()を実行
     this.getPosts();
   }
@@ -162,5 +166,27 @@ export class HomePage implements OnInit {
   differenceTime(time: Date): string {
     moment.locale('ja');
     return moment(time).fromNow();
+  }
+
+  // ログアウト処理
+  logout() {
+    this.afStore.firestore.disableNetwork();
+    this.afAuth.auth
+      .signOut()
+      .then(async () => {
+        const toast = await this.toastCtrl.create({
+          message: 'ログアウト',
+          duration: 3000
+        });
+        await toast.present();
+        this.router.navigateByUrl('/login');
+      })
+      .catch(async error => {
+        const toast = await this.toastCtrl.create({
+          message: error.toString(),
+          duration: 3000
+        });
+        await toast.present();
+      });
   }
 }
